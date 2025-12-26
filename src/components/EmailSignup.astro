@@ -6,9 +6,7 @@
     I email out my less SFW ramblings here.
   </p>
   <form 
-    method="POST" 
-    action="https://buttondown.com/api/emails/embed-subscribe/johannes-dev"
-    class="embeddable-buttondown-form"
+    id="email-signup-form"
     style="display: flex; gap: 0.5rem; flex-wrap: wrap;"
   >
     <input
@@ -31,6 +29,7 @@
     />
     <button
       type="submit"
+      id="submit-btn"
       style="
         padding: 0.625rem 1.25rem;
         border: 1px solid #e5e5e5;
@@ -44,5 +43,51 @@
       Send me the notes
     </button>
   </form>
+  <p id="form-message" style="margin: 1rem 0 0; color: #999; font-size: 0.9375rem; display: none;"></p>
 </div>
+
+<script>
+  const form = document.getElementById('email-signup-form');
+  const emailInput = document.getElementById('bd-email');
+  const submitBtn = document.getElementById('submit-btn');
+  const messageEl = document.getElementById('form-message');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = emailInput.value.trim();
+    const originalBtnText = submitBtn.textContent;
+    
+    // Disable form during submission
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    messageEl.style.display = 'none';
+    
+    try {
+      const formData = new FormData();
+      formData.append('email', email);
+      
+      const response = await fetch('https://buttondown.com/api/emails/embed-subscribe/johannes-dev', {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors' // Prevents CORS issues, but we won't get response
+      });
+      
+      // Since we use no-cors, we can't read the response
+      // But if no error is thrown, assume success
+      messageEl.textContent = 'Thanks! Check your email to confirm.';
+      messageEl.style.color = '#999';
+      messageEl.style.display = 'block';
+      emailInput.value = '';
+      
+    } catch (error) {
+      messageEl.textContent = 'Something went wrong. Please try again.';
+      messageEl.style.color = '#999';
+      messageEl.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+    }
+  });
+</script>
 
