@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EmailSignup from '../components/EmailSignup.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<Layout title="Notes on building small B2B SaaS">
+  <p>I'm a solo developer building small B2B software.<br />
+  These are notes I write for myself while figuring out what works and what doesn't.</p>
+
+  <ul style="list-style: none; padding: 0; margin: 2rem 0;">
+    {posts.map((post) => (
+      <li style="margin-bottom: 1.5rem;">
+        <a href={`/posts/${post.slug}`} style="color: inherit; text-decoration: none;">
+          <h2 style="margin: 0 0 0.25rem; font-size: 1.125rem; font-weight: 500;">
+            {post.data.title}
+          </h2>
+          <time style="color: #999; font-size: 0.875rem;">
+            {post.data.pubDate.toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </time>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <EmailSignup />
+</Layout>
+
