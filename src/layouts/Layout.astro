@@ -6,6 +6,7 @@ interface Props {
 
 const { title, description = "THE ESOTERIC SOFTWARE RAMBLINGS OF JOHANNES" } = Astro.props;
 const siteTitle = "THE ESOTERIC SOFTWARE RAMBLINGS OF JOHANNES" ;
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
@@ -21,7 +22,7 @@ const siteTitle = "THE ESOTERIC SOFTWARE RAMBLINGS OF JOHANNES" ;
   </head>
   <body>
     <header>
-      <h1><a href="/">{siteTitle}</a></h1>
+      <h1><a href={baseUrl}>{siteTitle}</a></h1>
     </header>
     <main>
       <slot />
